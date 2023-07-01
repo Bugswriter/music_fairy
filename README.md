@@ -43,4 +43,4 @@ Please note that a working internet connection is required for Music Fairy to fe
 - GPL-3
 
 ## Support
-- [https://bugswriter.com/donate](Checkout my donate page)
+- Checkout my donate page - [bugswriter.com/donate](https://bugswriter.com/donate)
