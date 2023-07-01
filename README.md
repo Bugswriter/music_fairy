@@ -14,6 +14,7 @@ To install Music Fairy, follow these steps:
 
 ```
 pip3 install vosk
+pip3 install yt-dlp
 pip3 install google_speech
 ```
 
