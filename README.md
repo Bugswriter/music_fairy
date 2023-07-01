@@ -38,3 +38,9 @@ Once installed and configured, you can use Music Fairy to play songs by followin
 4. Enjoy your music!
 
 Please note that a working internet connection is required for Music Fairy to fetch music from YouTube.
+
+## License
+- GPL-3
+
+## Support
+- [https://bugswriter.com/donate](Checkout my donate page)
