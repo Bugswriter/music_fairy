@@ -1,30 +1,55 @@
 # Music Fairy
 
-Music Fairy is a script that utilizes speech recognition to play any song audio in MPD (Music Player Daemon). It uses YouTube as a source to fetch music and integrates with various libraries and tools to provide a seamless music playback experience.
+Music Fairy is a script that utilizes speech recognition to play any song audio in MPV. It uses YouTube as a source to fetch music and integrates with various libraries and tools to provide a seamless music playback experience.
+
+## Features
+
+<b>Uses Open-AI's Whisper (High Accuracy Speech Recognition)</b>
+
+## Dependecies
+
+-   yt-dlp
+-   python
+-   python-pip
+-   wget
+-   ffmpeg
+-   mpv
 
 ## Installation
 
-To install Music Fairy, follow these steps:
-
-1. Clone the repository from GitHub: [github.com/bugswriter/music_fairy](https://github.com/bugswriter/music_fairy)
-
-2. Copy the `music-fairy` script into `~/.local/bin` on your system.
-
-3. Install the required Python packages by running the following commands:
+Install In One Go:
 
 ```
-pip3 install vosk
-pip3 install yt-dlp
-pip3 install google_speech
+    git clone https://github.com/bugswriter/music_fairy
+    cd music_fairy
+    cp -r ./music-fairy ~/.local/bin/
+    chmod +x ~/.local/bin/music-fairy
+
+    pip install git+https://github.com/openai/whisper.git
+    mkdir -p $HOME/.local/share/musicfairy
+    wget "https://openaipublic.azureedge.net/main/whisper/models/9ecf779972d90ba49c06d968637d720dd632c55bbf19d441fb42bf17a411e794/small.pt" -O $HOME/.local/share/musicfairy/small.pt
+    echo "Model Downloaded! Run Script again to start listening to music!"
+
+    cd ..
+    rm -rf music_fairy
 ```
 
-4. Ensure that `ffmpeg` is installed on your system.
+## HOW TO DOWNLOAD BETTER MODEL
 
-5. Download the Vosk model from [alphacephei.com/vosk/models](https://alphacephei.com/vosk/models). It is recommended to download the lighter model with a smaller file size.
+Download the OpenAI Whisper model by using below snippet. It is recommended to download the lighter model with a smaller file size.
 
-6. Put the model directory in `~/.local/share/music_fairy/`, or change the `VOSK_MODEL_PATH` variable to the path where you downloaded the Vosk model.
+https://github.com/openai/whisper <b>(DOWNLOAD WITH RESPECT TO YOUR AVAILABE VRAM SIZE)</b>
 
-7. Bind Music Fairy to a specific key using your system's keybinding configuration.
+```py
+import sys
+from whisper import _download, _MODELS
+
+models = ["tiny.en", "tiny", "base.en", "base", "small.en", "small", "medium.en", "medium", "large"]
+
+for model in models:
+    _download(_MODELS["medium"], "~/.local/share/musicfairy", False)
+
+```
 
 ## Usage
 
@@ -34,14 +59,16 @@ Once installed and configured, you can use Music Fairy to play songs by followin
 
 2. Speak the name of the song or artist you want to play.
 
-3. Music Fairy will fetch the audio from YouTube and play it using MPD.
+3. Music Fairy will fetch the audio from YouTube and play it using MPV.
 
 4. Enjoy your music!
 
 Please note that a working internet connection is required for Music Fairy to fetch music from YouTube.
 
 ## License
-- GPL-3
+
+-   GPL-3
 
 ## Support
-- Checkout my donate page - [bugswriter.com/donate](https://bugswriter.com/donate)
+
+-   Checkout my donate page - [bugswriter.com/donate](https://bugswriter.com/donate)
