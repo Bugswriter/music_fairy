@@ -1,42 +1,30 @@
 #!/bin/sh
+source ./func.lib
 
-# variables
-VOSK_MODEL_PATH="$HOME/.local/share/music_fairy/vosk-model-small-fa-0.5/"
-INVIDIOUS_INSTANCE="https://vid.puffyan.us" # some instances might not work
-
-# stop current song, clear playlist
-mpv stop
-mpv clear
-
-# take mic input
-#ffmpeg -y -f alsa -i default -acodec pcm_s16le -ac 1 -ar 44100 -t 4 -f wav ~/.cache/audio.wav
-
-# convert it into text & store it in `audio_input`
-#vosk-transcriber -m $VOSK_MODEL_PATH -i ~/.cache/audio.wav -o ~/.cache/audio_text.txt
-#read audio_input < ~/.cache/audio_text.txt
-
-
-#get song's name from params
-audio_input=${@}
-
-
-# Audio confirmation notification
-google_speech " All right.. let me play.. $audio_input" &
-
-# make youtube search query
-query="$(printf '%s' "song audio $audio_input" | tr ' ' '+' )"
-
-# search on invidous (youtube) instance for video id to make a url
-video_id="$(curl -s "$INVIDIOUS_INSTANCE/search?q=$query" | grep -Eo "watch\?v=.{11}" | head -n 1)"
-youtube_url="https://youtube.com/$video_id"
-
-# get url for bestaudio stream from the youtube video
-audio_url="$(yt-dlp -f bestaudio --get-url "$youtube_url")"
-
-# add the track to mpd and play
-mpv add "$audio_url"
-mpv play
-
-# Get youtube video title for system notification
-title=$(yt-dlp --get-title "$youtube_url")
-notify-send "Playing: " "$title"
+while getopts ":s:c:d:p:" option
+do
+    non_zero $#OPTARG
+    case $option in
+        s )
+            play_song $OPTARG
+            exit 0
+            ;;
+        c )
+            echo "creating playlist $OPTARG"
+            create_playlist $OPTARG
+            exit 0
+            ;;
+        d )
+            delete_playlist $OPTARG
+            exit 0
+            ;;
+        p )
+            play_playlist $OPTARG
+            exit 0
+            ;;
+        ? )
+            echo "invalid switch"
+            exit 0
+            ;;
+    esac
+done
