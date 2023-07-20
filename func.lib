@@ -43,13 +43,17 @@ play_playlist(){
         while read song
         do
             query="$(printf '%s' "song audio $song" | tr ' ' '+' )"
+            
             video_id="$(curl -s "$INVIDIOUS_INSTANCE/search?q=$query" | grep -Eo "watch\?v=.{11}" | head -n 1)"
+
             youtube_url="https://youtube.com/$video_id"
 
+            title=$(yt-dlp --get-title "$youtube_url")
+            notify-send "Playing: " "$title"
+            
             # get url for bestaudio stream from the youtube video
             audio_url="$(yt-dlp -f bestaudio --get-url "$youtube_url")"
             mpv "$audio_url"
-            echo "added"
         done < $file
     fi
 
