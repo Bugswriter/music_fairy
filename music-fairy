@@ -1,7 +1,6 @@
 #!/bin/sh
-source ./func.lib
-
-while getopts ":s:c:d:p:" option
+source ~/.local/share/music_fairy/func.lib
+while getopts ":s:c:d:p:h" option
 do
     non_zero $#OPTARG
     case $option in
@@ -20,6 +19,10 @@ do
             ;;
         p )
             play_playlist $OPTARG
+            exit 0
+            ;;
+        h )
+            help
             exit 0
             ;;
         ? )

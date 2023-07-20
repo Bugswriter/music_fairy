@@ -7,12 +7,14 @@ non_zero(){
 
 }
 
+
 create_playlist(){
     name=""
     file=~/.local/share/music_fairy/playlist/$1.txt
-    while true 
+    echo "print exit() for exit!"
+    while true
     do
-           read name
+        read name
         if [ $name == "exit()" ]
         then
             break
@@ -23,36 +25,35 @@ create_playlist(){
 }
 
 delete_playlist(){
-           file=~/.local/share/music_fairy/playlist/$1.txt
-           if [ -e $file ]
-            then
+    file=~/.local/share/music_fairy/playlist/$1.txt
+    if [ -e $file ]
+    then
 
-               rm $file
-            
-               echo "DELETED"
-           fi
-           }
+        rm $file
 
-           play_playlist(){
+        echo "DELETED"
+    fi
+}
+
+play_playlist(){
     INVIDIOUS_INSTANCE="https://vid.puffyan.us" # some instances might not work
-           file=~/.local/share/music_fairy/playlist/$1.txt
-           if [ -e $file ]
-           then
-            while read song 
-            do
+    file=~/.local/share/music_fairy/playlist/$1.txt
+    if [ -e $file ]
+    then
+        while read song
+        do
             query="$(printf '%s' "song audio $song" | tr ' ' '+' )"
-    video_id="$(curl -s "$INVIDIOUS_INSTANCE/search?q=$query" | grep -Eo "watch\?v=.{11}" | head -n 1)"
-    youtube_url="https://youtube.com/$video_id"
+            video_id="$(curl -s "$INVIDIOUS_INSTANCE/search?q=$query" | grep -Eo "watch\?v=.{11}" | head -n 1)"
+            youtube_url="https://youtube.com/$video_id"
 
-    # get url for bestaudio stream from the youtube video
-    audio_url="$(yt-dlp -f bestaudio --get-url "$youtube_url")"
-    mpv "$audio_url"
-           echo "added"
-            done < $file
-    mpv play
-           fi
+            # get url for bestaudio stream from the youtube video
+            audio_url="$(yt-dlp -f bestaudio --get-url "$youtube_url")"
+            mpv "$audio_url"
+            echo "added"
+        done < $file
+    fi
 
-           }
+}
 play_song(){
 
     INVIDIOUS_INSTANCE="https://vid.puffyan.us" # some instances might not work
@@ -89,7 +90,16 @@ play_song(){
     title=$(yt-dlp --get-title "$youtube_url")
     notify-send "Playing: " "$title"
     # add the track to mpd and play
-    mpv add "$audio_url"
-    mpv play
+    mpv "$audio_url"
+
+}
+help(){
+    echo "welcome to help menu"
+    echo -e
+    echo "     c playlist_name for create palylist"
+    echo "     p playlist_name for playing specified playlist"
+    echo "     d playlist_name for deleting playlist"
+    echo "     s song_name     for playing specified song"
+    echo "     h               for help menu"
 
 }
